@@ -1,0 +1,6 @@
+# swagger documentation
+components:
+  schemas:
+tags:
+  - name: Ventas
+paths: /

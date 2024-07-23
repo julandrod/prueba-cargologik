@@ -1,0 +1,237 @@
+/ventas:
+  get:
+    tags:
+      - Ventas
+    summary: Lista todas las ventas
+    description: Retorna un listado general de todas las ventas
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Ventas listada de manera exitosa"
+                body:
+                  allVentas: {}
+                  totalVentas:
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/resumen-diario:
+  get:
+    tags:
+      - Ventas
+    summary: Genera un resumen diario de ventas
+    description: Agrupa las ventas por día, calcula el total de ventas, cantidad de productos vendidos y número de transacciones por día
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Resumen diario"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/top-productos:
+  get:
+    tags:
+      - Ventas
+    summary: Obtiene los 5 productos mas vendidos
+    description: Incluye la cantidad total vendida y el ingreso total por producto
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Top 5 productos"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/analisis-categorias:
+  get:
+    tags:
+      - Ventas
+    summary: Obtiene un analisis por cada categoria
+    description: Agrupa las ventas por categoría de producto. Calcula el total de ventas, la venta promedio y el número de transacciones por categoría. Ordena las categorías por total de ventas descendente
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Analisis por categorias"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/rendimiento-regional:
+  get:
+    tags:
+      - Ventas
+    summary: Obtiene estadisticas de rendimiento por cada region
+    description: Analiza el rendimiento de ventas por región. Calcula el total de ventas, número de transacciones y el valor promedio de transacción por región. Incluye el producto más vendido en cada región
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Analisis rendimiento regional"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/tendencias-mensuales:
+  get:
+    tags:
+      - Ventas
+    summary: Obtiene estadisticas sobre las ventas mensuales
+    description: Agrupa las ventas por mes. Calcula el total de ventas y la cantidad de productos vendidos por mes. Calcula el porcentaje de cambio en las ventas respecto al mes anterior
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Analisis tendencias mensuales"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500
+/ventas/analisis-fechas:
+  get:
+    tags:
+      - Ventas
+    summary: Obtiene estadisticas dentro de un rango de fechas ingresado por el usuario
+    description: Obtiene estadisticas dentro de un rango de fechas ingresado por el usuario
+    parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: date
+          description: Fecha inicial a consultar
+        - in: query
+          name: endDate
+          schema:
+            type: date
+          description: Fecha final a consultar
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "200"
+                message: "Analisis por fechas"
+                body: {}
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message
+                  example: "Custom error"
+                code:
+                  type: integer
+                  description: Error code
+                  example: 500

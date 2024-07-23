@@ -1,0 +1,27 @@
+components:
+  schemas:
+    ventaSchema:
+      type: object
+      properties:
+        producto:
+          type: string
+        categoria:
+          type: string
+        precio:
+          type: number
+        cantidad: 
+          type: number
+        fecha:
+          type: date
+        cliente: 
+          type: string
+        region:
+          type: string
+      required:
+        - producto
+        - categoria
+        - precio
+        - cantidad
+        - fecha
+        - cliente
+        - region
