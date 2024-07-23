@@ -10,7 +10,8 @@ const getAllVentas = async (req, res) => {
 
     endpointResponse({
       res,
-      message: { allVentas, totalVentas },
+      message: "Ventas listada de manera exitosa",
+      body: { allVentas, totalVentas },
     });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
@@ -40,7 +41,7 @@ const getResumenDiario = async (req, res) => {
       },
     ]);
 
-    endpointResponse({ res, message: resumen });
+    endpointResponse({ res, message: "Resumen diario", body: resumen });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
@@ -70,7 +71,7 @@ const getTopProductos = async (req, res) => {
       },
     ]);
 
-    endpointResponse({ res, message: topProductos });
+    endpointResponse({ res, message: "Top 5 productos", body: topProductos });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
@@ -98,7 +99,11 @@ const getAnalisisCategorias = async (req, res) => {
       },
     ]);
 
-    endpointResponse({ res, message: analisisCategoria });
+    endpointResponse({
+      res,
+      message: "Analisis por categorias",
+      body: analisisCategoria,
+    });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
@@ -125,9 +130,12 @@ const getRendimientoRegional = async (req, res) => {
         },
       },
       {
+        // Se usa el operador $lookup para hacer una subconsulta del array
+        // productos creado en la etapa anterior
         $lookup: {
           from: "productos",
           let: { region: "$_id" },
+
           pipeline: [
             { $match: { $expr: { $eq: ["$region", "$$region"] } } },
             {
@@ -158,7 +166,11 @@ const getRendimientoRegional = async (req, res) => {
       },
     ]);
 
-    endpointResponse({ res, message: rendimientoRegional });
+    endpointResponse({
+      res,
+      message: "Analisis rendimiento regional",
+      body: rendimientoRegional,
+    });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
@@ -210,12 +222,17 @@ const getTendenciasMensuales = async (req, res) => {
       }
     );
 
-    endpointResponse({ res, message: tendenciasMensualesConCambio });
+    endpointResponse({
+      res,
+      message: "Analisis tendencias mensuales",
+      body: tendenciasMensualesConCambio,
+    });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
 };
 
+// Obtiene estadisticas dentro de un rango de fechas ingresado por el usuario
 const getAnalisisFechas = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -296,7 +313,11 @@ const getAnalisisFechas = async (req, res) => {
       },
     ]);
 
-    endpointResponse({ res, message: analisisFechas });
+    endpointResponse({
+      res,
+      message: "Analisis por fechas",
+      body: analisisFechas,
+    });
   } catch (error) {
     throw new CustomError(error.message, error.statusCode, error.errors);
   }
