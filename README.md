@@ -4,7 +4,7 @@
 
 ## Documentation
 
-[Documentation](localhost:5000/api-docs/)
+[Documentation](http://localhost:5000/api-docs/)
 
 ## Run Locally
 
