@@ -11,6 +11,8 @@
 
 class CustomError extends Error {
   constructor(message, statusCode, errors = []) {
+    console.log(message);
+    console.log(statusCode)
     super();
 
     this.message = message;
