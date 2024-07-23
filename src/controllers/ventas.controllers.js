@@ -152,8 +152,8 @@ const getRendimientoRegional = async (req, res) => {
           totalVentas: 1,
           numeroTransacciones: 1,
           promedioTransaccion: 1,
-          //   productoMasVendido: "$productoMasVendido",
-          //   cantidadVendida: "$productoMasVendido.totalCantidad",
+          productoMasVendido: "$productoMasVendido._id",
+          cantidadVendida: "$productoMasVendido.totalCantidad",
         },
       },
     ]);
@@ -216,6 +216,92 @@ const getTendenciasMensuales = async (req, res) => {
   }
 };
 
+const getAnalisisFechas = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      throw new CustomError(
+        "Debe incluir una fecha de inicio y otra de final",
+        400
+      );
+    }
+
+    const analisisFechas = await Venta.aggregate([
+      {
+        // Encuentra informacion que cumpla con las condiciones
+        // fecha mayor o igual a startDate
+        // fecha menor o igual a endDate
+        $match: {
+          fecha: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        // El operador $facet me permite crear diferentes pipelines en paralelo
+        $facet: {
+          // Crea un resumen general
+          resumenGeneral: [
+            {
+              // Agrupa la informacion general
+              $group: {
+                // Se usa el id null para agrupar todos los documentos
+                _id: null,
+                // Se calcula el total de ventas
+                totalVentas: { $sum: { $multiply: ["$cantidad", "$precio"] } },
+                // Se calcula la cantidad total de productos
+                cantidadTotalProductos: { $sum: "$cantidad" },
+                // Se cuenta la cantidad de transacciones
+                numeroTransacciones: { $sum: 1 },
+              },
+            },
+          ],
+          // Crea un resumen de ventas por categoria
+          ventasPorCategoria: [
+            {
+              // Agrupa los documentos por categoria
+              $group: {
+                _id: "$categoria",
+                totalVentas: { $sum: { $multiply: ["$cantidad", "$precio"] } },
+                cantidadTotalProductos: { $sum: "$cantidad" },
+                numeroTransacciones: { $sum: 1 },
+              },
+            },
+            // Ordena las ventas por categoria en orden descendente
+            { $sort: { totalVentas: -1 } },
+          ],
+          // Crea un resumen de ventas por mes
+          ventasPorMes: [
+            {
+              $group: {
+                _id: { $dateToString: { format: "%Y-%m", date: "$fecha" } },
+                totalVentas: { $sum: { $multiply: ["$cantidad", "$precio"] } },
+                cantidadTotalProductos: { $sum: "$cantidad" },
+                numeroTransacciones: { $sum: 1 },
+              },
+            },
+            { $sort: { _id: 1 } },
+          ],
+        },
+      },
+      {
+        // Se indica que propiedades seran mostradas
+        $project: {
+          resumenGeneral: { $arrayElemAt: ["$resumenGeneral", 0] },
+          ventasPorCategoria: 1,
+          ventasPorMes: 1,
+        },
+      },
+    ]);
+
+    endpointResponse({ res, message: analisisFechas });
+  } catch (error) {
+    throw new CustomError(error.message, error.statusCode, error.errors);
+  }
+};
+
 export {
   getAllVentas,
   getResumenDiario,
@@ -223,4 +309,5 @@ export {
   getAnalisisCategorias,
   getRendimientoRegional,
   getTendenciasMensuales,
+  getAnalisisFechas,
 };
