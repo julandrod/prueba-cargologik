@@ -2,6 +2,11 @@ import { connectDB } from "./db/connect.js";
 import {  fakerES_MX } from "@faker-js/faker";
 import Venta from "./models/Venta.js";
 
+/**
+ * Genera datos aleatorio para la coleccion de ventas,
+ * usando la libreria Fakerjs
+ */
+
 const seedVentas = async () => {
   await connectDB(process.env.MONGO_URL);
 
